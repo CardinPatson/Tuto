@@ -1,0 +1,28 @@
+<html>
+	<script>
+		async function handleClick(e) {
+			let formData = new FormData();
+
+			formData.append("image", document.getElementById("file").files[0]);
+
+			const response = await fetch("http://localhost:3001/post", {
+				method: "POST",
+				body: formData,
+			});
+		}
+	</script>
+	<body>
+		<form
+			enctype="multipart/form-data"
+			onsubmit="event.preventDefault();return handleClick();"
+		>
+			<input
+				type="file"
+				name="image"
+				id="file"
+				accept="image/gif , image/png , image/jpeg"
+			/>
+			<input type="submit" />
+		</form>
+	</body>
+</html>
