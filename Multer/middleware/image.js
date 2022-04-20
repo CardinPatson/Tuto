@@ -7,9 +7,12 @@ const TYPE_IMAGES = {
 };
 
 const storage = multer.diskStorage({
+	// STORAGE OF IMAGE
 	destination: (req, file, callback) => {
 		callback(null, "images");
 	},
+
+	//MAKE EACH IMAGE UNIQUE
 	filename: (req, file, callback) => {
 		const name = file.originalname.split(" ").join("_");
 		const extension = TYPE_IMAGES[file.mimetype];
