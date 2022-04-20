@@ -1,21 +1,15 @@
 <html>
-	<script>
-		async function handleClick(e) {
-			let formData = new FormData();
-
-			formData.append("image", document.getElementById("file").files[0]);
-
-			const response = await fetch("http://localhost:3001/post", {
-				method: "POST",
-				body: formData,
-			});
+	<style>
+		#container__images {
+			display: flex;
 		}
-	</script>
+		.image__fetch {
+			width: 250px;
+			height: 250px;
+		}
+	</style>
 	<body>
-		<form
-			enctype="multipart/form-data"
-			onsubmit="event.preventDefault();return handleClick();"
-		>
+		<form enctype="multipart/form-data" id="multerForm">
 			<input
 				type="file"
 				name="image"
@@ -24,5 +18,57 @@
 			/>
 			<input type="submit" />
 		</form>
+		<div id="container__images"></div>
+		<script>
+			let form = document.getElementById("multerForm");
+			
+			form.addEventListener("submit", postImages);
+			window.addEventListener("load", fetchImages);
+
+			//INSERTION DIMAGE
+			async function postImages() {
+				//Création du formulaire et insertion de l'image à l'intérieur
+				event.preventDefault();
+				let formData = new FormData();
+				formData.append("image", document.getElementById("file").files[0]);
+
+				//insertion du formulaire
+				const response = await fetch("http://localhost:3001/images", {
+					method: "POST",
+					body: formData,
+				}).catch((err) => {
+					console.error(err);
+				});
+
+				const images = await response.json();
+				makeHtml(images);
+			}
+
+			//RECUPERATION DIMAGE
+			async function fetchImages(event) {
+				event.preventDefault();
+				const response = await fetch("http://localhost:3001/images", {
+					method: "GET",
+				}).catch((err) => {
+					console.error(err);
+				});
+				const images = await response.json();
+				makeHtml(images);
+			}
+
+			//HTML
+			function makeHtml(images) {
+				if (images.url.length) {
+					let html = "";
+					images.url.forEach((image) => {
+						let imgHtml = `<img class="image__fetch" src=${image}>`;
+						html += imgHtml;
+					});
+
+					const container = document.getElementById("container__images");
+					container.innerHTML = html;
+				}
+			}
+		</script>
 	</body>
 </html>
