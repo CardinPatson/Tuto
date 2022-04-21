@@ -53,6 +53,6 @@ app.get("/images", (req, res) => {
 		res.status(500).json({ error });
 	}
 });
-app.listen(8080, "0.0.0.0", () => {
+app.listen(3001, "0.0.0.0", () => {
 	console.log("running on port 8080");
 });
